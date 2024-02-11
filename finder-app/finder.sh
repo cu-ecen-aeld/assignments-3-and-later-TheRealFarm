@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ "$#" -ne 2 ]; then
 	echo "Incorrect number of arguments."
@@ -20,11 +20,11 @@ file_count=0
 total_line_count=0
 
 for file in $files; do
-	((file_count++))
+	file_count=$(expr $file_count + 1)
 
 	line_count=$(grep -c "$searchstr" "$file")
 
-	((total_line_count += line_count))
+	total_line_count=$(expr $total_line_count + $line_count)
 done
 
 echo "The number of files are $file_count and the number of matching lines are $total_line_count"
