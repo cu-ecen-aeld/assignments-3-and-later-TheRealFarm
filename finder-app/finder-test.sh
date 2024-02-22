@@ -55,7 +55,7 @@ for i in $( seq 1 $NUMFILES)
 do
 	if [ $assignment != 'assignment1' ]
 	then
-		./writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
+		writer "$WRITEDIR/${username}$i.txt" "$WRITESTR"
 	else
 		./writer.sh "$WRITEDIR/${username}$i.txt" "$WRITESTR"
 	fi
