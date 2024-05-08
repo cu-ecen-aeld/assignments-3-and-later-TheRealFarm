@@ -41,11 +41,11 @@ int accept_connections(int server_fd) {
 
 		char buffer[BUFFER_SIZE];
 		ssize_t bytes_received;
-		ssize_t total_bytes_received;
+		ssize_t total_bytes_received = 0;
 		int write_error = 0;
 
 		while((bytes_received = recv(new_socket_fd, buffer, sizeof(buffer), 0)) > 0) {
-			total_bytes_received += bytes_received;
+			ssize_t total_bytes_received = bytes_received;
 			char* newline_pos;
 			while((newline_pos = memchr(buffer, '\n', total_bytes_received)) != NULL) {
 				ssize_t packet_length = newline_pos - buffer + 1;
@@ -104,8 +104,10 @@ int main() {
 	syslog(LOG_INFO, "registering signals");
 	signal(SIGINT, signal_handler);
 	signal(SIGTERM, signal_handler);
+	syslog(LOG_INFO, "signals registered");
 
 	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+		syslog(LOG_ERR, "could not open socket");
 		closelog();
 		return -1;
 	}
@@ -115,6 +117,7 @@ int main() {
 	address.sin_port = htons(9000);
 
 	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) == -1) {
+		syslog(LOG_ERR, "could not bind socket");
 		closelog();
 		return -1;
 	}
